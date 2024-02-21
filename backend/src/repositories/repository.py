@@ -92,10 +92,12 @@ class Repository(Generic[DBModel]):
     def add(self, model: DBModel) -> None:
         values = self._parse_model_value(model)
         values = ", ".join(values)
+        properties = ", ".join(self.properties)
 
         sql_add_command = (
-            f"INSERT INTO {self.table_name} ({self.properties}) VALUES ({values});"
+            f"INSERT INTO {self.table_name} ({properties}) VALUES ({values});"
         )
+        print(sql_add_command)
         self.cursor.execute(sql_add_command)
         # update id
         model.id = self.cursor.lastrowid

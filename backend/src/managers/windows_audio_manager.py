@@ -14,8 +14,8 @@ class WindowsAudioManager(IAudioManager):
             value = 100
         if value < 0:
             value = 0
-        db_value = self._percentage_to_db(value)
-        self.volume.SetMasterVolumeLevel(db_value, None)
+        db_value = value / 100
+        self.volume.SetMasterVolumeLevelScalar(db_value, None)
 
     def volume_up(self, value: int) -> None:
         current_value = self.get_volume()
@@ -43,7 +43,8 @@ class WindowsAudioManager(IAudioManager):
             self.volume_off()
 
     def get_volume(self) -> int:
-        db_value = self.volume.GetMasterVolumeLevel()
+        db_value = self.volume.GetMasterVolumeLevelScalar() * 100
+        return db_value
         return self._db_to_percentage(db_value)
 
     @staticmethod
